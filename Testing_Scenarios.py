@@ -164,18 +164,29 @@ v_ref = 30
 
 u_0 = npy.array([1, 2])
 
-f = []
-f = vehicle_dynamics_ks(x_0, u_0, p)
-Ak, Bk, gk = jacobian_ks(x_0, u_0, p, dT, f)
+u_array = npy.zeros((N, 2))
+u_array[0, :] = u_0
+x_array = npy.zeros((N, 5))
+x_array[0, :] = x_0
+
+f = npy.zeros((N, 5))
+Ak = npy.zeros((5, 5, N))
+Bk = npy.zeros((5, 2, N))
+gk = npy.zeros((5, 1, N))
+
+
+for k in range(N):
+    f[k, :] = vehicle_dynamics_ks(x_array[k, :], u_array[k, :], p)
+    Ak[:,:, k], Bk[:,:, k], gk[:,:, k] = jacobian_ks(x_array[k, :], u_array[k, :], p, dT, f[k, :])
 
 for k in range(N):
     # cost function
     cost += quad_form(x[:,k+1] - npy.array([0,0,v_ref,0,0],), Q)\
            + R * u[k] ** 2
     # single state and input constraints
-    f = vehicle_dynamics_ks.vehicle_dynamics_ks(x[:,k], u[:, k], p)
-    Ak, Bk, gk = vehicle_dynamics_ks.jacobian_ks(x, u, p, dT, f)
-    constr.append(x[:,k+1] == Ak*x[:,k] + Bk*u[k]+gk)
+    #f = vehicle_dynamics_ks(x[:,k], u[:, k], p)
+    #Ak, Bk, gk = jacobian_ks(x, u, p, dT, f)
+    constr.append(x[:,k+1] == Ak[:,:,k]*x[:,k] + Bk[:,:,k]*u[k]+gk)
     # add obstacle constraint
     constr.append(x[0,k+1] <= x_max[k])
     constr.append(x[0,k+1] >= x_min[k])

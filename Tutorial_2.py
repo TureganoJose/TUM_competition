@@ -173,7 +173,7 @@ print("Problem is convex: ",prob.is_dcp())
 print("Problem solution is "+prob.status)
 
 # plot results
-plot_state_vector(x, TIConstraints())
+# plot_state_vector(x, TIConstraints())
 
 tiConstraints = [x[1,:] <= c.v_max, x[1,:] >= c.v_min] # velocity
 tiConstraints += [x[2,:] <= c.a_max, x[2,:] >= c.a_min] # acceleration
@@ -188,7 +188,7 @@ print("Problem is convex: ",prob.is_dcp())
 print("Problem solution is "+prob.status)
 
 # plot results
-plot_state_vector(x, c)
+# plot_state_vector(x, c)
 
 # extract obstacle from scenario
 dyn_obstacles = scenario.dynamic_obstacles
@@ -211,8 +211,8 @@ for o in dyn_obstacles:
             s_max.append(p.position[0]-o.obstacle_shape.length/2.-2.5)
 
 # plot vehicle motions
-plt.plot(range(1,len(s_min)+1),s_min,'b')
-plt.plot(range(1,len(s_max)+1),s_max,'r')
+# plt.plot(range(1,len(s_min)+1),s_min,'b')
+# plt.plot(range(1,len(s_max)+1),s_max,'r')
 
 # initial state of ego vehicle
 x_0 = npy.array([initial_state.position[0],
@@ -249,7 +249,7 @@ print("Problem is convex:",prob.is_dcp())
 print("Problem solution is "+prob.status)
 
 # plot results
-plot_state_vector(x, c, [s_min,s_max])
+# plot_state_vector(x, c, [s_min,s_max])
 
 x_result = x.value
 s_ego = x_result[0,:].flatten()
